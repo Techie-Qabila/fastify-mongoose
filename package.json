@@ -1,0 +1,41 @@
+{
+  "name": "fastify-mongoose",
+  "version": "0.1.0",
+  "description": "Fastify Mongoose connection plugin",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard & tap test.js",
+    "mongo": "docker run -p 27017:27017 mongo:3.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mahmed8003/fastify-mongoose.git"
+  },
+  "keywords": [
+    "fastify",
+    "mongo",
+    "mongodb",
+    "mongoose",
+    "database",
+    "connection"
+  ],
+  "author": "Muhammad Ahmed <mahmed8003@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mahmed8003/fastify-mongoose/issues"
+  },
+  "homepage": "https://github.com/mahmed8003/fastify-mongoose#readme",
+  "devDependencies": {
+    "fastify": "^0.25.3",
+    "standard": "^10.0.2",
+    "tap": "^10.7.1"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "fastify-plugin": "^0.1.0",
+    "mongoose": "^4.11.5"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  }
+}
