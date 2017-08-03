@@ -14,26 +14,25 @@ function fastifyMongoose (fastify, options, next) {
     useMongoClient: true
   })
 
-  Mongoose.connect(uri, opt, onConnect)
+  Mongoose.Promise = Bluebird
+  Mongoose.connect(uri, opt)
+    .then(() => {
+      const mongo = {
+        db: Mongoose.connection,
+        ObjectId: ObjectId
+      }
 
-  function onConnect (err) {
-    if (err) return next(err)
+      fastify
+        .decorate('mongo', mongo)
+        .addHook('onClose', function (fastify, done) {
+          fastify.mongo.db.close(done)
+        })
 
-    const mongo = {
-      db: Mongoose.connection,
-      ObjectId: ObjectId
-    }
-
-    fastify
-            .decorate('mongo', mongo)
-            .addHook('onClose', close)
-
-    next()
-  }
+      next()
+    },
+    err => {
+      if (err) return next(err)
+    })
 }
 
-function close (fastify, done) {
-  fastify.mongo.db.close(done)
-}
-
-module.exports = fp(fastifyMongoose, '>=0.25.3')
+module.exports = fp(fastifyMongoose, '>=0.13.1')
