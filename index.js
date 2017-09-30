@@ -35,4 +35,4 @@ function fastifyMongoose (fastify, options, next) {
     })
 }
 
-module.exports = fp(fastifyMongoose, '>=0.13.1')
+module.exports = fp(fastifyMongoose, '>=0.29.0')
