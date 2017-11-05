@@ -1,6 +1,6 @@
 {
   "name": "fastify-mongoose",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Fastify Mongoose connection plugin",
   "main": "index.js",
   "scripts": {
@@ -31,9 +31,9 @@
     "tap": "^10.7.2"
   },
   "dependencies": {
-    "bluebird": "^3.5.0",
+    "bluebird": "^3.5.1",
     "fastify-plugin": "^0.1.1",
-    "mongoose": "^4.11.13"
+    "mongoose": "^4.13.0"
   },
   "engines": {
     "node": ">=8.5.0"
