@@ -2,20 +2,14 @@
 
 const fp = require('fastify-plugin')
 const Mongoose = require('mongoose')
-const Bluebird = require('bluebird')
 
 const ObjectId = Mongoose.Types.ObjectId
 
 function fastifyMongoose (fastify, options, next) {
   const uri = options.uri
   delete options.uri
-  const opt = Object.assign({}, options, {
-    promiseLibrary: Bluebird,
-    useMongoClient: true
-  })
 
-  Mongoose.Promise = Bluebird
-  Mongoose.connect(uri, opt)
+  Mongoose.connect(uri, options)
     .then(() => {
       const mongo = {
         db: Mongoose.connection,
@@ -35,4 +29,4 @@ function fastifyMongoose (fastify, options, next) {
     })
 }
 
-module.exports = fp(fastifyMongoose, '>=0.29.0')
+module.exports = fp(fastifyMongoose)
