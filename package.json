@@ -33,7 +33,7 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "fastify-plugin": "^0.1.1",
-    "mongoose": "^4.13.0"
+    "mongoose": "^5.1.5"
   },
   "engines": {
     "node": ">=8.5.0"
