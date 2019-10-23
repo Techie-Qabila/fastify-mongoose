@@ -10,8 +10,7 @@ function fastifyMongoose (fastify, options, next) {
   const uri = options.uri
   delete options.uri
   const opt = Object.assign({}, options, {
-    promiseLibrary: Bluebird,
-    useMongoClient: true
+    promiseLibrary: Bluebird
   })
 
   Mongoose.Promise = Bluebird
