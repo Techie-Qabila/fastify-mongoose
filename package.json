@@ -26,9 +26,9 @@
   },
   "homepage": "https://github.com/mahmed8003/fastify-mongoose#readme",
   "devDependencies": {
-    "fastify": "^0.29.0",
+    "fastify": "^0.38.0",
     "standard": "^10.0.3",
-    "tap": "^10.7.2"
+    "tap": "^14.8.2"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
