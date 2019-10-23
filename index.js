@@ -1,37 +1,48 @@
 'use strict'
 
 const fp = require('fastify-plugin')
-const Mongoose = require('mongoose')
+const mongoose = require('mongoose')
 const Bluebird = require('bluebird')
+const ObjectId = mongoose.Types.ObjectId
 
-const ObjectId = Mongoose.Types.ObjectId
+mongoose.Promise = Bluebird
 
 function fastifyMongoose (fastify, options, next) {
   const uri = options.uri
   delete options.uri
   const opt = Object.assign({}, options, {
-    promiseLibrary: Bluebird
+    promiseLibrary: Bluebird,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
   })
 
-  Mongoose.Promise = Bluebird
-  Mongoose.connect(uri, opt)
-    .then(() => {
-      const mongo = {
-        db: Mongoose.connection,
-        ObjectId: ObjectId
-      }
+  mongoose.connect(uri, opt)
+    .then(
+      () => {
 
-      fastify
-        .decorate('mongo', mongo)
-        .addHook('onClose', function (fastify, done) {
-          fastify.mongo.db.close(done)
-        })
+        mongoose.connection.on('error', err => {
+          console.log('Mongoose connection error', err)
+        });
 
-      next()
-    },
-    err => {
-      if (err) return next(err)
-    })
+        const mongo = {
+          db: mongoose.connection,
+          ObjectId: ObjectId
+        }
+
+        fastify
+          .decorate('mongo', mongo)
+          .addHook('onClose', function (fastify, done) {
+            fastify.mongo.db.close(done)
+          })
+
+        next()
+      })
+    .catch(
+      err => {
+          console.log('Error connecting to MongoDB', err)
+          next(err)
+        }
+    )
 }
 
 module.exports = fp(fastifyMongoose, '>=0.29.0')
