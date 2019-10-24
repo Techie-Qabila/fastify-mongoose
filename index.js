@@ -13,7 +13,8 @@ function fastifyMongoose (fastify, options, next) {
   const opt = Object.assign({}, options, {
     promiseLibrary: Bluebird,
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   })
 
   mongoose.connect(uri, opt)
