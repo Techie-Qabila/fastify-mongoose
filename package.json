@@ -32,7 +32,6 @@
     "tap": "^14.10.2"
   },
   "dependencies": {
-    "bluebird": "^3.7.2",
     "fastify-plugin": "^1.6.0",
     "mongoose": "^5.7.14"
   },
