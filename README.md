@@ -16,8 +16,6 @@ const fastify = require('fastify')
 
 fastify.register(require('fastify-mongoose'), {
   uri: 'mongodb://localhost/test_db'
-}, err => {
-  if (err) throw err
 })
 
 fastify.listen(3000, err => {
@@ -25,6 +23,9 @@ fastify.listen(3000, err => {
   console.log(`server listening on ${fastify.server.address().port}`)
 })
 ```
+
+##### Breaking changes
+`"version": "0.3.0` and above plugin have ability to open connection with multiple different databases, for achieving this functionality it have to stop using default mongoose connection. Onward please use db client returned by this plugin.
 
 ## License
 

@@ -2,48 +2,73 @@
 
 const fp = require('fastify-plugin')
 const mongoose = require('mongoose')
-const Bluebird = require('bluebird')
 const ObjectId = mongoose.Types.ObjectId
-
-mongoose.Promise = Bluebird
 
 function fastifyMongoose (fastify, options, next) {
   const uri = options.uri
+  if (!uri) {
+    next(new Error('`uri` parameter is mandatory'))
+    return
+  }
   delete options.uri
-  const opt = Object.assign({}, options, {
-    promiseLibrary: Bluebird,
+
+  const name = options.name
+  if (name) {
+    delete options.name
+  }
+
+  const opt = {
+    useCreateIndex: true,
+    ...options,
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
-  })
+    useUnifiedTopology: true
+  }
 
-  mongoose.connect(uri, opt)
-    .then(
-      () => {
-
-        mongoose.connection.on('error', err => {
-          console.log('Mongoose connection error', err)
-        });
-
-        const mongo = {
-          db: mongoose.connection,
-          ObjectId: ObjectId
-        }
-
-        fastify
-          .decorate('mongo', mongo)
-          .addHook('onClose', function (fastify, done) {
-            fastify.mongo.db.close(done)
-          })
-
-        next()
+  mongoose.createConnection(uri, opt)
+    .then(db => {
+      db.on('error', err => {
+        fastify.log.error(err, 'Mongoose connection error')
       })
-    .catch(
-      err => {
-          console.log('Error connecting to MongoDB', err)
-          next(err)
+
+      fastify.addHook('onClose', function (fastify, done) {
+        db.close(done)
+      })
+
+      const mongo = {
+        db: db,
+        ObjectId: ObjectId
+      }
+
+      if (name) {
+        if (!fastify.mongo) {
+          fastify.decorate('mongo', mongo)
         }
-    )
+        if (fastify.mongo[name]) {
+          next(new Error('Connection name already registered: ' + name))
+          return
+        }
+
+        fastify.mongo[name] = mongo
+      } else {
+        if (fastify.mongo) {
+          next(new Error('fastify-mongoose has already registered'))
+          return
+        }
+      }
+
+      if (!fastify.mongo) {
+        fastify.decorate('mongo', mongo)
+      }
+
+      next()
+    })
+    .catch(err => {
+      fastify.log.error(err, 'Error connecting to MongoDB')
+      next(err)
+    })
 }
 
-module.exports = fp(fastifyMongoose, '>=0.29.0')
+module.exports = fp(fastifyMongoose, {
+  fastify: '>=1.0.0',
+  name: 'fastify-mongoose'
+})

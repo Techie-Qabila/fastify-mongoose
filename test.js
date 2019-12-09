@@ -8,14 +8,12 @@ const fastifyMongoose = require('./index')
 const uri = 'mongodb://localhost/test_db'
 
 test('fastify.mongo should exist', t => {
-  t.plan(5)
+  t.plan(4)
 
   const fastify = Fastify()
 
   fastify.register(fastifyMongoose, {
     uri: uri
-  }, err => {
-    t.error(err)
   })
 
   fastify.ready(err => {
