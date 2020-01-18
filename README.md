@@ -1,4 +1,4 @@
-# fastify-mongodb
+# fastify-mongoose
 
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](http://standardjs.com/)
 
@@ -9,7 +9,7 @@ Under the hood [mongoose](http://mongoosejs.com/index.html) ODM is used, the opt
 npm i fastify-mongoose --save
 ```
 ## Usage
-Add it to you project with `register` and you are done!  
+Add it to you project with `register` and you are done!
 You can access the *Mongoose Connection* via `fastify.mongo.db` and *ObjectId* via `fastify.mongo.ObjectId`.
 ```js
 const fastify = require('fastify')
