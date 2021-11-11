@@ -45,9 +45,11 @@ fastify.listen(3000, err => {
 declare module 'fastify' {
   import { Connection, ObjectId } from 'mongoose';
 
-  mongo: { // needs to be the same name in options
-    db: Connection;
-    ObjectId: ObjectId;
+  interface FastifyInstance {
+    mongo: { // needs to be the same name in options
+      db: Connection;
+      ObjectId: ObjectId;
+    }
   }
 }
 ```
