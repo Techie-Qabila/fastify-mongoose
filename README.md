@@ -24,6 +24,36 @@ fastify.listen(3000, err => {
 })
 ```
 
+**With Typescript**
+
+```typescript
+import fastify from 'fastify'
+import fastifyMongoose, { FastifyMongooseOptions } from 'fastify-mongoose'
+
+const options: FastifyMongooseOptions = {
+  uri: 'mongodb://localhost/test_db',
+  name: 'mongo' // Optional, the name to decorate fastify
+}
+
+fastify.register(fastifyMongoose, )
+
+fastify.listen(3000, err => {
+  if (err) throw err
+  console.log(`server listening on ${fastify.server.address().port}`)
+})
+
+declare module 'fastify' {
+  import { Connection, ObjectId } from 'mongoose';
+
+  interface FastifyInstance {
+    mongo: { // needs to be the same name in options
+      db: Connection;
+      ObjectId: ObjectId;
+    }
+  }
+}
+```
+
 ##### Breaking changes
 `"version": "0.3.0` and above plugin have ability to open connection with multiple different databases, for achieving this functionality it have to stop using default mongoose connection. Onward please use db client returned by this plugin.
 
